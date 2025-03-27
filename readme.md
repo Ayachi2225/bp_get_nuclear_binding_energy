@@ -8,4 +8,7 @@
 储存模型文件和加载模型文件在文件最下面被我注释掉了，如需使用请将注释删去
 
 一般来说都有numpy库吧但为了以防万一还是加了requirements.txt
+
 请在本项目文件夹下运行cmd，执行代码`python -m pip install -r requirements.txt`或直接`pip install numpy`
+
+~~bp算法由ai生成~~
