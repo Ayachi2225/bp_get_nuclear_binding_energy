@@ -1,4 +1,5 @@
 import numpy as np
+from drops import calculate
 
 # Sigmoid 激活函数及其导数
 def sigmoid(x):
@@ -81,7 +82,7 @@ with open('Comparison_Binding_energy.txt') as f :
     for lines in f:
         numbers = lines.split()
         x = [int(numbers[0]),int(numbers[1])]
-        y = [float(numbers[2])/10000]
+        y = [float(numbers[2])/10000-calculate(x[0],x[1])]  # 从文件中提取A与N，并将实验值与理论值相减
         X.append(x)
         Y.append(y)
 # 构建训练集和测试集
@@ -90,9 +91,9 @@ Xp = []
 Yt = []
 Yp = []
 # 训练集
-xt_start = 0  #训练集开始位置
-xt_over = 21 #训练集结束位置（取不到）
-xt_step = 1
+xt_start = 20  #训练集开始位置
+xt_over = 50 #训练集结束位置（取不到）
+xt_step = 2
 xp_start = 21 # 预测集开始位置
 xp_over = 32 # 预测集结束位置(取不到)
 xp_step = 2
@@ -110,18 +111,18 @@ Yt = np.array(Yt) #train
 nn = NeuralNetwork(input_size=2, hidden_size=4, output_size=1, learning_rate=0.1)
 nn.train(Xt, Yt, epochs=10000)
 
-
+MSE = 0
+E_n = 0
 # 预测集
 for i in range(xp_start,xp_over,xp_step):
     xp = X[i]
-    yp = Y[i]
-    predictions = nn.predict(xp)
+    yp = Y[i][0]
+    predictions = nn.predict(xp)[0][0]
+    MSE += pow((yp-predictions),2)
+    E_n += 1
     print(f"Predictions:{predictions},reality:{yp}")
-for i in range(xp_start,xp_over,xp_step):
-    xp = X[i]
-    yp = Y[i]
-    predictions = nn.predict(xp)
-    print(f"Predictions2:{predictions},reality:{yp}")
+print(f'MSE:{MSE} ')
+
 
 ## 储存模型
 # save_model("bp_model.npz", nn)
